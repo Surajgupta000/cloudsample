@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
 
 const Table2 = () => {
-  const { resolvedTerritory, data } = useContext(AppContext);
+  const { resolvedTerritory, data, resolvedUserName } = useContext(AppContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
   const itemsPerPage = 10;
@@ -50,7 +50,8 @@ const Table2 = () => {
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Territory Account Details for {resolvedTerritory}</h2>
+      <h2 className="text-xl font-semibold mb-4">Territory Account Details for {resolvedUserName}</h2>
+
       <table className="min-w-full bg-white border border-gray-200 text-sm">
         <thead>
           <tr className="bg-gray-100">

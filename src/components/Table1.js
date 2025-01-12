@@ -33,7 +33,7 @@ const Table1 = ({ callType, territory }) => {
 
   return (
     <div>
-      <h2 className="text-sm font-semibold mb-4">Phone Details for Territory: {territory} - Call Type: {callType}</h2>
+      <h2 className="text-sm font-semibold mb-4 mt-3 text-center">Phone Details</h2>
       <table className="min-w-full bg-white border border-gray-200 text-sm">
         <thead>
           <tr className="bg-gray-100">

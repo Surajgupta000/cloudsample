@@ -8,9 +8,9 @@ const AppContext = createContext();
 
 const useParsedData = () => {
   const parsedData = useMemo(() => {
-    // Map users to their territory
+    // Map users to their territory and name
     const usersById = users.reduce((acc, user) => {
-      acc[user.userId] = user.territory;
+      acc[user.userId] = { territory: user.territory, userName: user.userName };
       return acc;
     }, {});
 
@@ -46,8 +46,10 @@ const AppProvider = ({ children }) => {
   const [selectedCallType, setSelectedCallType] = useState(null);
   const data = useParsedData();
 
-  // Resolve the territory from selected user
-  const resolvedTerritory = selectedUser ? data.usersById[selectedUser] : null;
+  // Resolve the territory and user name from selected user
+  const resolvedUser = selectedUser ? data.usersById[selectedUser] : null;
+  const resolvedTerritory = resolvedUser ? resolvedUser.territory : null;
+  const resolvedUserName = resolvedUser ? resolvedUser.userName : null;
 
   const handleSetSelectedUser = (user) => {
     setSelectedUser(user);
@@ -55,7 +57,7 @@ const AppProvider = ({ children }) => {
   };
 
   return (
-    <AppContext.Provider value={{ selectedUser, setSelectedUser: handleSetSelectedUser, resolvedTerritory, data, selectedCallType, setSelectedCallType, users }}>
+    <AppContext.Provider value={{ selectedUser, setSelectedUser: handleSetSelectedUser, resolvedTerritory, resolvedUserName, data, selectedCallType, setSelectedCallType, users }}>
       {children}
     </AppContext.Provider>
   );

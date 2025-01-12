@@ -58,8 +58,7 @@ const Graph = () => {
 
   return (
     <div className="flex flex-row gap-4 h-full">
-      <div className="w-1/2 flex justify-center p-4 bg-blue-200 m-4 rounded-md">
-        {/* <h2 className="text-xl font-semibold mb-4">Graph for {resolvedTerritory}</h2> */}
+      <div className="w-1/2 flex justify-center p-4 bg-blue-200 m-4 rounded-md" style={{ height: '100%' }}>
         <Pie
           data={chartData}
           options={{
