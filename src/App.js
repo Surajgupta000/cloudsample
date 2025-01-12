@@ -11,10 +11,10 @@ const App = () => (
   <AppProvider>
     <div className="flex flex-col min-h-screen max-h-screen max-w-screen">
       <Navbar />
-      <div className="flex-grow container mx-auto p-4 overflow-auto">
+      <div className="flex-grow container mx-auto py-4 overflow-auto">
         <div className="flex flex-col gap-4 h-full">
           {/* Graph Row */}
-          <div className="flex flex-row gap-4 p-4 h-full max-h-[60vh] shadow-md ">
+          <div className="flex flex-row gap-4 py-4 h-full max-h-[65vh] shadow-md ">
             <div className="w-full h-fill">
               <Graph />
             </div>

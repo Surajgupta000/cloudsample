@@ -5,7 +5,7 @@ const Table1 = ({ callType, territory }) => {
   const { data } = useContext(AppContext);
   const [currentPage, setCurrentPage] = useState(1);
   const [filteredCalls, setFilteredCalls] = useState([]);
-  const itemsPerPage = 10;
+  const itemsPerPage = 5;
 
   useEffect(() => {
     const userAccounts = data.accountsByTerritory?.[territory] || [];
