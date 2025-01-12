@@ -35,7 +35,7 @@ const useParsedData = () => {
       return acc;
     }, {});
 
-    return { usersById, accountsByTerritory, callsByAccount, emailsByAccount };
+    return { usersById, accountsByTerritory, callsByAccount, emailsByAccount, accounts };
   }, []);
 
   return parsedData;

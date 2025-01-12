@@ -5,22 +5,27 @@ import ReactDOM from 'react-dom/client';
 import { AppProvider } from './context/AppContext';
 import Navbar from './components/Navbar';
 import Graph from './components/Graph';
-import Table1 from './components/Table1';
 import Table2 from './components/Table2';
 
 const App = () => (
   <AppProvider>
-    <Navbar />
-    <div className="p-4 space-y-4">
-      <div className="flex">
-        <div className="w-1/2">
-          <Graph />
-        </div>
-        <div className="w-1/2">
-          <Table1 />
+    <div className="flex flex-col min-h-screen max-h-screen max-w-screen">
+      <Navbar />
+      <div className="flex-grow container mx-auto p-4 overflow-auto">
+        <div className="flex flex-col gap-4 h-full">
+          {/* Graph Row */}
+          <div className="flex flex-row gap-4 p-4 h-full max-h-[60vh] shadow-md ">
+            <div className="w-full h-fill">
+              <Graph />
+            </div>
+          </div>
+
+          {/* Table Row */}
+          <div className="flex-grow p-4 bg-white shadow-md rounded overflow-auto h-fill">
+            <Table2 />
+          </div>
         </div>
       </div>
-      <Table2 />
     </div>
   </AppProvider>
 );

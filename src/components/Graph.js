@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { AppContext } from '../context/AppContext';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
@@ -9,6 +9,15 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const Graph = () => {
   const { resolvedTerritory, data } = useContext(AppContext);
   const [selectedCallType, setSelectedCallType] = useState(null);
+
+  useEffect(() => {
+    if (selectedCallType) {
+      const tableElement = document.getElementById('Table1');
+      if (tableElement) {
+        tableElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  }, [selectedCallType]);
 
   if (!resolvedTerritory) {
     return <p>Graph will be displayed here once a user is selected.</p>;
@@ -44,26 +53,30 @@ const Graph = () => {
       const index = chartElements[0].index;
       const callType = chartData.labels[index];
       setSelectedCallType(callType);
-      document.getElementById('Table1').scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   return (
-    <div className="flex flex-row">
-      <h2>Graph for {resolvedTerritory}</h2>
-      <Pie
-        data={chartData}
-        options={{
-          onClick: (event, chartElements) => onPieClick(event, chartElements),
-        }}
-      />
-      <div className="ml-4">
-        {selectedCallType && (
-          <div id="Table1">
-            <Table1 callType={selectedCallType} territory={resolvedTerritory} />
-          </div>
-        )}
+    <div className="flex flex-row gap-4 h-full">
+      <div className="w-1/2 flex justify-center p-4 bg-blue-200 m-4 rounded-md">
+        {/* <h2 className="text-xl font-semibold mb-4">Graph for {resolvedTerritory}</h2> */}
+        <Pie
+          data={chartData}
+          options={{
+            onClick: (event, chartElements) => onPieClick(event, chartElements),
+            plugins: {
+              legend: {
+                display: true,
+              },
+            },
+          }}
+        />
       </div>
+      {selectedCallType && (
+        <div id="Table1" className="w-1/2 flex justify-center h-full overflow-auto bg-blue-200 m-4 rounded-md">
+          <Table1 callType={selectedCallType} territory={resolvedTerritory} />
+        </div>
+      )}
     </div>
   );
 };

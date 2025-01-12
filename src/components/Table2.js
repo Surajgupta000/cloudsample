@@ -4,21 +4,33 @@ import { AppContext } from '../context/AppContext';
 const Table2 = () => {
   const { resolvedTerritory, data } = useContext(AppContext);
   const [currentPage, setCurrentPage] = useState(1);
-  const [filteredEmails, setFilteredEmails] = useState([]);
+  const [filteredAccounts, setFilteredAccounts] = useState([]);
   const itemsPerPage = 10;
 
   useEffect(() => {
     if (resolvedTerritory) {
       const userAccounts = data.accountsByTerritory?.[resolvedTerritory] || [];
-      const emails = userAccounts.flatMap(account => data.emailsByAccount[account.id] || []);
-      setFilteredEmails(emails);
+      const accountsData = userAccounts.map(account => {
+        const calls = data.callsByAccount[account.id] || [];
+        const emails = data.emailsByAccount[account.id] || [];
+        const latestCallDate = calls.length ? new Date(Math.max(...calls.map(call => new Date(call.callDate)))) : 'N/A';
+        const latestEmailDate = emails.length ? new Date(Math.max(...emails.map(email => new Date(email.emailDate)))) : 'N/A';
+        return {
+          accountName: account.name,
+          totalCalls: calls.length,
+          totalEmails: emails.length,
+          latestCallDate: latestCallDate !== 'N/A' ? latestCallDate.toLocaleDateString() : 'N/A',
+          latestEmailDate: latestEmailDate !== 'N/A' ? latestEmailDate.toLocaleDateString() : 'N/A',
+        };
+      });
+      setFilteredAccounts(accountsData);
     }
   }, [resolvedTerritory, data]);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredEmails.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredEmails.length / itemsPerPage);
+  const currentItems = filteredAccounts.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredAccounts.length / itemsPerPage);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -38,32 +50,34 @@ const Table2 = () => {
 
   return (
     <div>
-      <h2>Territory Account Details for {resolvedTerritory}</h2>
-      <table className="min-w-full bg-white">
+      <h2 className="text-xl font-semibold mb-4">Territory Account Details for {resolvedTerritory}</h2>
+      <table className="min-w-full bg-white border border-gray-200 text-sm">
         <thead>
-          <tr>
-            <th className="py-2">Email ID</th>
-            <th className="py-2">Account ID</th>
-            <th className="py-2">Email Date</th>
-            <th className="py-2">Status</th>
+          <tr className="bg-gray-100">
+            <th className="py-2 px-4 border-b text-center">Account Name</th>
+            <th className="py-2 px-4 border-b text-center">Total Calls</th>
+            <th className="py-2 px-4 border-b text-center">Total Emails</th>
+            <th className="py-2 px-4 border-b text-center">Latest Call Date</th>
+            <th className="py-2 px-4 border-b text-center">Latest Email Date</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(email => (
-            <tr key={email.id}>
-              <td className="py-2">{email.id}</td>
-              <td className="py-2">{email.accountId}</td>
-              <td className="py-2">{email.emailDate}</td>
-              <td className="py-2">{email.status}</td>
+          {currentItems.map((account, index) => (
+            <tr key={index} className="hover:bg-gray-50">
+              <td className="py-2 px-4 border-b text-center">{account.accountName}</td>
+              <td className="py-2 px-4 border-b text-center">{account.totalCalls}</td>
+              <td className="py-2 px-4 border-b text-center">{account.totalEmails}</td>
+              <td className="py-2 px-4 border-b text-center">{account.latestCallDate}</td>
+              <td className="py-2 px-4 border-b text-center">{account.latestEmailDate}</td>
             </tr>
           ))}
         </tbody>
       </table>
       <div className="flex justify-between mt-4">
-        <button onClick={handlePrevPage} disabled={currentPage === 1} className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button onClick={handlePrevPage} disabled={currentPage === 1} className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50">
           Previous
         </button>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages} className="bg-blue-500 text-white px-4 py-2 rounded">
+        <button onClick={handleNextPage} disabled={currentPage === totalPages} className="bg-blue-500 text-white px-4 py-2 rounded disabled:opacity-50">
           Next
         </button>
       </div>
